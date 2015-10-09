@@ -3,10 +3,10 @@
 Oath-powered photos & music, of the 2015 Argonauts!
 
 ```
-The Argonaut Oath
+            THE ARGONAUT OATH
 
-We the Argonauts
-United by a common spirit, vow to
+            We  the Argonauts
+     United by a common spirit, vow to
 
 Cherish the Unknown, the Uncertain, the Untried
   Challenge Darkness, Dogma and Fear
@@ -14,7 +14,7 @@ Welcome the Strange, the Dirty, the Odd, and
   Seek Treasure, Passion and Thyself!
 
 
-                                 [Argonaut Dave]
+                                [Argonaut Dave]
 ```
 
 ## Build instructions
