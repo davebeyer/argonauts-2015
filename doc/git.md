@@ -55,7 +55,7 @@ Then, back in local copy
 
 ```
 git remote add origin https://github.com/davebeyer/argonauts-2015.git
-git push -u origin master  # will ask for github username-email/password
+git push -u origin master  # may ask for github username-email/password
 ```
 
 
