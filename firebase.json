@@ -1,0 +1,9 @@
+{
+  "firebase": "argonauts-2015",
+  "public": "client",
+  "ignore": [
+    "firebase.json",
+    "**/node_modules/**",
+    "**/.*"
+  ]
+}

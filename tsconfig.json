@@ -1,0 +1,23 @@
+{
+  "version": "1.5.3",
+
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true
+  },
+
+  "//" : "compilerOption -- outDir : build -- module: system",
+
+  "filesGlob": [
+    "./**/*.ts",
+    "!**/node_modules/**/*.ts",
+    "!./**/*.d.ts"
+  ]
+}

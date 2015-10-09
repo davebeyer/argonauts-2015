@@ -1,0 +1,2 @@
+pkill -f 'http-server client --cors -p 8096'
+pkill -f 'gulp'

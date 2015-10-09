@@ -1,0 +1,5 @@
+
+Example (for a given 'word'):
+
+apiKey = "9f63510ab680a9a2504370c0a530c846ba454b12337f0c6c0";
+url    = "http://api.wordnik.com:80/v4/word.json/" + word + "/definitions?limit=200&includeRelated=true&useCanonical=false&includeTags=false&api_key=" + apiKey;

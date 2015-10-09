@@ -1,0 +1,34 @@
+{
+  "name": "argonauts-2015",
+  "version": "1.0.0",
+  "description": "The 2015 Burning Man Argonauts Show",
+  "author": "Argonaut Dave Beyer",
+  "license": "https://creativecommons.org/licenses/by-nc-sa/4.0",
+  "scripts": {
+    "restart": "npm run stop ; ./bin/start-dev",
+    "start": "npm run restart",
+    "stop" : "./bin/stop ; true",
+    "clean": "find . -name '*~' | xargs -L 1 rm -v ",
+    "build": "./bin/build ; true",
+    "update": "git pull && npm run build",
+    "publish": "npm run build ; ./bin/publish"
+  },
+  "dependencies": {
+    "angular2": "2.0.0-alpha.35",
+    "bootstrap": "^3.3.5",
+    "es6-module-loader": "^0.16",
+    "requirejs": "^2.1.20",
+    "systemjs": "^0.16",
+    "traceur": "0.0.91"
+  },
+  "devDependencies": {
+    "browserify": "^11.2.0",
+    "chalk": "^1.1.1",
+    "dateformat": "^1.0.11",
+    "gulp": "^3.9.0",
+    "tsc": "^1.20150623.0",
+    "tsify": "^0.12.2",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
+  }
+}

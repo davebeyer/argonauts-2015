@@ -1,0 +1,7 @@
+pkill -f 'http-server client --cors -p 8096'
+pkill -f 'gulp'
+
+npm install
+(gulp watch-dev) &
+
+(nohup http-server client --cors -p 8096 > log/server.log)  &

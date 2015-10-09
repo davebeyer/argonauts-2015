@@ -1,0 +1,18 @@
+SmugMug API 2.0 Key info
+
+API Key: fnI0lGNx6FFVAFzOBMTxd82V6g2t8dKD
+API Secret: 31e21596d14ced0e5b65848e8a92819d
+
+From: https://api.smugmug.com/api/v2/doc/tutorial/api-key.html
+
+You can access public data without obtaining any
+authorization. However, you must include your API key in every such
+request. Just add APIKey=your-key-here to the query string of each
+request URL.
+
+  APIKey=fnI0lGNx6FFVAFzOBMTxd82V6g2t8dKD
+
+E.g., to get images in an album:
+
+  curl http://www.smugmug.com/api/v2/album/mTsgQn\!images?APIKey=fnI0lGNx6FFVAFzOBMTxd82V6g2t8dKD\&count=1000 --header 'Accept: application/json'  -o burning-man-2015-images.json
+

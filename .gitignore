@@ -1,0 +1,15 @@
+*~
+.DS_Store
+
+doc/SmugMug_API_Keys.txt
+log/*
+
+node_modules/*
+
+/client/app/*.js
+/client/app/*.js.map
+/client/components/*.js
+/client/components/*.js.map
+
+
+
