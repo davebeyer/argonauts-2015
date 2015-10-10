@@ -19,8 +19,7 @@ import {Component, View, EventEmitter} from 'angular2/angular2';
 
 export class ShowMusic {
 
-    fadeVolume : number;
-    fadeTimer  : number;
+    fadeTimers    : any;
 
     // initevent emitter
     parent        : any;  
@@ -30,8 +29,7 @@ export class ShowMusic {
         this.initevent = new EventEmitter();
         this.parent    = null;  // will be set by the parent
 
-        this.fadeVolume = 1.0;
-        this.fadeTimer  = null;
+        this.fadeTimers = {};
     }
 
     onInit() {
@@ -40,7 +38,7 @@ export class ShowMusic {
     }
 
     registerParent(parent) {
-	this.parent = parent;
+        this.parent = parent;
     }
 
     addAudio(audioId, url, filename, options) {
@@ -64,20 +62,21 @@ export class ShowMusic {
     play(audioId, options) {
         if (!options) { options = {}; }
 
-        // Stop all others, jic
-        this.pauseAll();
+        if (options.volume === undefined) {
+            options.volume = 1.0;
+        }
 
         setTimeout(function() {
             // Give browser a moment for the pause to take effect
             var $audio = $("#music-container #audio-" + audioId);
 
-	    // Cast to <any> to avoid TS errors when setting audio properties below
-	    var audio  = <any>($audio[0]);  
+            // Cast to <any> to avoid TS errors when setting audio properties below
+            var audio  = <any>($audio[0]);  
 
             // Reset
             audio.loop = true;
             audio.currentTime = 0;
-            audio.volume = 1.0;
+            audio.volume = options.volume;
             audio.play();
         }, 10);
     }
@@ -85,32 +84,47 @@ export class ShowMusic {
     fadeOut(audioId, options) {
         if (!options) {options = {}; }
 
-        if (! options.noInit) {
-            this.fadeVolume = 1.0;
+        var fadeInfo;
+
+        var $audio = $("#music-container #audio-" + audioId);
+
+        // Cast to <any> to avoid TS errors when setting audio properties below
+        var audio  = <any>($audio[0]);  
+
+        if (audioId in this.fadeTimers) {
+            fadeInfo = this.fadeTimers[audioId];
+        } else {
+            fadeInfo = {
+                targetVolume : options.targetVolume ? options.targetVolume : 0.0,
+                volume       : audio.volume,
+                timer        : null
+            }
         }
 
-        this.fadeTimer = setTimeout(function() {
-            if (this.fadeVolume > 0.0) {
-                this.fadeVolume = Math.max(0.0, this.fadeVolume - 0.025);
-                var $audio = $("#music-container #audio-" + audioId);
+        fadeInfo.timer = setTimeout(function() {
+            if (fadeInfo.volume > fadeInfo.targetVolume) {
+                fadeInfo.volume = Math.max(0.0, fadeInfo.volume - 0.025);
 
-		// Cast to <any> to avoid TS errors when setting audio properties below
-		var audio  = <any>($audio[0]);  
-
-                audio.volume = this.fadeVolume;
+                audio.volume = fadeInfo.volume;
 
                 // reset timer
-                this.fadeOut(audioId, {noInit: true});
+                this.fadeOut(audioId);
             } else {
-                this.fadeTimer = null;
+                if (audioId in this.fadeTimers) {
+                    delete this.fadeTimers[audioId];
+                }
             }
         }.bind(this), 100);
+
+        this.fadeTimers[audioId] = fadeInfo;
     }
 
     pauseAll() {
-        if (this.fadeTimer) {
-            clearTimeout(this.fadeTimer);
-            this.fadeTimer = null;
+        for (var audioId in this.fadeTimers) {
+            if (this.fadeTimers[audioId].timer) {
+                clearTimeout(this.fadeTimers[audioId].timer);
+                delete this.fadeTimers[audioId];
+            }
         }
 
         var $allAudios = $("#music-container audio");

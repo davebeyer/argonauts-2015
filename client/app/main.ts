@@ -169,7 +169,9 @@ class Argonauts2015 {
 
                     setTimeout(function() {
                         $("#splash-page2").stop(true, true).fadeOut(2000);
-                        $("#oath-page").stop(true, true).fadeIn(2000);
+                        $("#oath-page").stop(true, true).fadeIn(2000, function() {
+                            self.showMusic.play("oath-bg", {volume : 0.5});
+                        });
                     }.bind(this), splash2Dur);
                 }.bind(this));
             }.bind(this), 2000);
@@ -216,6 +218,7 @@ class Argonauts2015 {
             self.nextImage(1, function() {
                 self.runSlideshow();
                 if (self.showMusic) {
+                    self.showMusic.fadeOut("oath-bg");
                     self.showMusic.play(self.word);
                 }
             });
@@ -550,6 +553,7 @@ class Argonauts2015 {
 
         if (options.stopMusic && this.showMusic) {
             this.showMusic.fadeOut(this.word);
+            this.showMusic.play("oath-bg", {volume : 0.6});
         }
         
         self.running = false;
@@ -590,7 +594,8 @@ class Argonauts2015 {
     // Music
 
     initMusic() {
-        https://docs.google.com/uc?export=open&id=
+        this.showMusic.addAudio('oath-bg', "", "biking.mp3");
+
         this.showMusic.addAudio('argonauts', "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNjlxZ21uUEVEalE", "In-A-Gadda-Da-Vida.mp3");
         this.showMusic.addAudio('spirit',    "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyekxybVRRTHB1ZUU", "Magic_Carpet_Ride.mp3");
 
@@ -615,3 +620,4 @@ class Argonauts2015 {
 $(document).ready(function() {
     bootstrap(Argonauts2015);
 });
+
