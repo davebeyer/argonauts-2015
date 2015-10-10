@@ -102,7 +102,7 @@ var ShowMusic = require('./music').ShowMusic;
               <a href="mailto:argonauts.united@gmail.com" target="_blank">argonauts.united@gmail.com</a><br/>
               Burning Man MMXV
             </div>
-            <div style="position:absolute; right: 20px; bottom: 30px; z-index:20; color:#ACCAE6; font-size:22px"> 
+            <div style="position:absolute; right: 20px; bottom: 30px; z-index:20; color:#ACCAE6; font-size:18px"> 
               Click on a word, <br/>
               Each has its own slideshow 
             </div>
