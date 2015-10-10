@@ -33,25 +33,34 @@ var ShowMusic = require('./music').ShowMusic;
               Burning Man MMXV
             </div>
 
-            <div style="position:absolute; right: 20px; bottom: 25px; z-index:20; color:#aaa; font-size:22px"> Preparing ... </div>
+            <!-- 
+               <div style="position:absolute; right: 20px; bottom: 25px; z-index:20; color:#ddd; font-size:22px"> Preparing ... </div>
+             -->
           </div>
 
           <div id="splash-page2" style="width:100%; height: 100%; position:absolute; left: 0; right: 0; z-index: 0; display:none">
-            <div style="width:100%; position:absolute; left: 0; right: 0; z-index: 10">
+            <div style="width:100%; height: 100%; position:absolute; left: 0; right: 0; z-index: 10">
               <img style="width: 100%; height:100%" src="assets/img/argonaut_flag_red_plain.png"/>
             </div>
 
-            <div style="position:relative; top: 150px; z-index:20; color:#eee; font: 36px 'times new vespasian'; width: 700px; margin: 0 auto; padding-left:50px"> 
-              The <span style="font-size:60%">(modern-day)</span> Argonauts:
-              <table style="color:#eee; font: 28px 'times new vespasian'; margin: 20px 0 0 20px">
+            <div style="position:relative; top: 80px; z-index:20; color:#444; font: 42px 'times new vespasian'; width: 850px; margin: 0 auto; padding-left:80px"> 
+              The Argonauts:<sup style="font-size:60%">*</sup>
+              <table style="color: #444; font: 36px 'times new vespasian'; margin: 20px 0 0 20px">
                 <tr style="height:100px">
                   <td valign="top" style="width:40px"><b>1.</b></td>
                   <td valign="top">The associated camp of eight virgin burners<br/>at the burn of MMXV<br/>(the original Burning Man Argonauts).</td>
+                </tr>
+                <tr>
+                  <td colspan="2">&nbsp;</td>
                 </tr>
                 <tr style="height:100px">
                   <td valign="top"><b>2.</b></td>
                   <td valign="top">Those subsequently inducted by reciting<br/>the <b>Argonaut Oath</b> ...</td>
                 </tr>
+                <tr>
+                  <td colspan="2" align="right">  <span style="font-size:60%">* modern-day</span>  </td>
+                </tr>
+        
               </table>
             </div>
 
@@ -59,11 +68,15 @@ var ShowMusic = require('./music').ShowMusic;
               <a href="mailto:argonauts.united@gmail.com" target="_blank">argonauts.united@gmail.com</a><br/>
               Burning Man MMXV
             </div>
+
+            <div class="prog-bar">
+              <div class="prog"></div>
+            </div>
           </div>
 
-          <div id="oath-page" style="width:100%; height:100%; position:absolute; left: 0; right: 0; z-index: 10; display:none">
+          <div id="oath-page" style="color: #444; width:100%; height:100%; position:absolute; left: 0; right: 0; z-index: 10; display:none">
 
-            <div style="width:100%; position:absolute; left: 0; right: 0; z-index: 10">
+            <div style="width:100%; height: 100%; position:absolute; left: 0; right: 0; z-index: 10">
               <img style="width: 100%; height:100%" src="assets/img/argonaut_flag_red_plain.png"/>
             </div>
 
@@ -78,8 +91,8 @@ var ShowMusic = require('./music').ShowMusic;
                   Welcome the  <a href="#" class="word">Strange</a>, the  <a href="#" class="word">Dirty</a>, the  <a href="#" class="word">Odd</a>, and <br/>
                   &nbsp; Seek  <a href="#" class="word">Treasure</a>, <a href="#" class="word">Passion</a>, and <a href="#" class="word">Thyself</a>. 
 
-                  <div style="text-align:right; margin:-15px 10px 0 0px; font-size:20px">
-  	            Argonaut Dave
+                  <div style="text-align:right; margin:10px 10px 0 0; font-size:20px">
+                    Argonaut Dave
                   </div>
                 </div>
               </div>
@@ -89,7 +102,7 @@ var ShowMusic = require('./music').ShowMusic;
               <a href="mailto:argonauts.united@gmail.com" target="_blank">argonauts.united@gmail.com</a><br/>
               Burning Man MMXV
             </div>
-            <div style="position:absolute; right: 20px; bottom: 30px; z-index:20; color:#aaa; font-size:22px"> 
+            <div style="position:absolute; right: 20px; bottom: 30px; z-index:20; color:#ddd; font-size:22px"> 
               Click on a word, <br/>
               Each has its own slideshow 
             </div>
@@ -97,6 +110,7 @@ var ShowMusic = require('./music').ShowMusic;
 
           <div id="slideshow" style="position: absolute; left: 0; top:0; width: 100%; height: 100%; display:none">
             <a class="stop"> &#8617;</a>
+            <p class="state-message" style="display:none"> Paused (spacebar to resume)</p>
             <p class="caption" style="display:none"></p>
           </div>
 
@@ -147,15 +161,26 @@ class Argonauts2015 {
         $("#splash-page img").attr('src', splashUrl).load(function() {
             console.log("Finished loading splash page image");
             setTimeout(function() {
-                $("#splash-page").stop(true, true).fadeOut(4000);
-                $("#splash-page2").stop(true, true).fadeIn(4000, function() {
-		    setTimeout(function() {
-			$("#splash-page2").stop(true, true).fadeOut(4000);
-			$("#oath-page").stop(true, true).fadeIn(4000);
-		    }.bind(this), 5000);
-		}.bind(this));
-            }.bind(this), 6000);
+                $("#splash-page").stop(true, true).fadeOut(2000);
+                $("#splash-page2").stop(true, true).fadeIn(2000, function() {
+                    var splash2Dur = 7000;
+
+                    $("#splash-page2 .prog").animate({width : "100%"}, splash2Dur);
+
+                    setTimeout(function() {
+                        $("#splash-page2").stop(true, true).fadeOut(2000);
+                        $("#oath-page").stop(true, true).fadeIn(2000);
+                    }.bind(this), splash2Dur);
+                }.bind(this));
+            }.bind(this), 2000);
         }.bind(this));
+
+        var defMargin = 130;
+        
+        $(window).resize(function() {
+            $(".chosen-block").css('max-width', $(window).width() - defMargin * 2);
+            self.scaleImage($("#slideshow img.active"));
+        });
 
         $("#oath .word").click(function(event) {
             event.preventDefault();
@@ -170,18 +195,18 @@ class Argonauts2015 {
 
             $("#main-wrapper .chosen-block").remove();  // be sure no lingering ones
 
-            var $chosenBlock = $('<div class="chosen-block"><span class="ch-word">' + self.word + '</span> <div class="ch-def"></div></div>');
+            var $chosenBlock = $('<div class="chosen-block"><span class="ch-word">' + self.word + '</span> <span class="ch-def"></span></div>');
             $chosenBlock.css({left : $this.offset().left - 20,  // -20 for padding
                               top  : $this.offset().top - 20, 
                               position : 'absolute'});
 
             $chosenBlock.find(".ch-def").html("");
-            $chosenBlock.find(".ch-def").css('max-width', $(window).width() - 280);
+            $chosenBlock.css('max-width', $(window).width() - defMargin * 2);
 
             self.getDefinition($chosenBlock.find(".ch-def"));
 
             setTimeout( function() {
-                $chosenBlock.animate({left : '10px', top  : '10px'}, 3000);
+                $chosenBlock.animate({left : defMargin + 'px', top  : '10px'}, 3000);
             }, 2000);
 
             $("#main-wrapper").append($chosenBlock);
@@ -211,6 +236,10 @@ class Argonauts2015 {
             console.log("Key pressed: " + event.which);
             if (self.running) {
                 switch (event.which) {
+                case 32:  // space bar
+                    event.preventDefault();
+                    self.toggleSlideshowRunState();
+                    break;
                 case 39:  // right arrow
                 case 40:  // down arrow
                     event.preventDefault();
@@ -308,7 +337,7 @@ class Argonauts2015 {
                 def = def + ' ' + newDef;
             }
             console.log("Defintion response", json);
-            $where.html(def);
+            $where.html('&#45;' + def);
         }).fail(function(jqxhr, textStatus, error) {
             console.error("Definition request failed: ", textStatus, error);
         });
@@ -340,8 +369,10 @@ class Argonauts2015 {
 
     fadeInImage($img, caption) {
         this.scaleImage($img);  // in case window changed size
-        $("#slideshow img").not($img).stop(true, true).fadeOut(2000);
-        $img.stop(true, true).fadeIn(2000);
+
+        $("#slideshow img").not($img).stop(true, true).fadeOut(2000).removeClass("active");
+
+        $img.stop(true, true).fadeIn(2000).addClass("active");
 
         // Hide old caption
         $("#slideshow .caption").stop(true, true).fadeOut(2000, function() {
@@ -489,6 +520,29 @@ class Argonauts2015 {
         });
     }
 
+    toggleSlideshowRunState() {
+        if (this.timerId === null) {
+            this.resumeSlideshow();
+        } else {
+            this.pauseSlideshow();
+        }
+    }
+
+    pauseSlideshow() {
+        console.log("Pausing");
+        $("#slideshow .state-message").show();
+
+        if (this.timerId !== null) {
+            clearTimeout(this.timerId)
+        }
+        this.timerId = null;
+    }
+
+    resumeSlideshow() {
+        console.log("Resuming");
+        this.runSlideshow({initTimeout : 100});
+    }
+
     stopSlideshow(options?) {
         if (!options) { options = {}; }
 
@@ -499,42 +553,48 @@ class Argonauts2015 {
         }
         
         self.running = false;
-        if (self.timerId !== null) {
-            clearTimeout(self.timerId)
-        }
-        self.timerId = null;
+        self.pauseSlideshow();
     }
 
-    runSlideshow() {
+    runSlideshow(options?) {
+        if (!options) {options = {}; }
+
+        var slideTimeout_ms = 6000;
+
+        if (options.initTimeout === undefined) { 
+            options.initTimeout =  slideTimeout_ms;
+        }
+
         var self = this;
 
         self.running = true;
+        $("#slideshow .state-message").hide();
 
         function _nextTick() {
             self.timerId = null;
             if (self.running) {
-                self.nextImage(1, function() { _setTimer(); });
+                self.nextImage(1, function() { _setTimer(slideTimeout_ms); });
             }
         }
 
-        function _setTimer() {
+        function _setTimer(timout_ms) {
             if (self.timerId !== null) {
                 clearTimeout(self.timerId)
             }
-            self.timerId = setTimeout(_nextTick, 6000);
+            self.timerId = setTimeout(_nextTick, timout_ms);
         }
 
-        _setTimer();
+        _setTimer(options.initTimeout);
     }
 
     // Music
 
     initMusic() {
-	https://docs.google.com/uc?export=open&id=
+        https://docs.google.com/uc?export=open&id=
         this.showMusic.addAudio('argonauts', "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNjlxZ21uUEVEalE", "In-A-Gadda-Da-Vida.mp3");
         this.showMusic.addAudio('spirit',    "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyekxybVRRTHB1ZUU", "Magic_Carpet_Ride.mp3");
 
-	this.showMusic.addAudio('unknown',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyMjNHOFh2SUNXc2s", "Stolen_Dance.mp3");
+        this.showMusic.addAudio('unknown',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyMjNHOFh2SUNXc2s", "Stolen_Dance.mp3");
         this.showMusic.addAudio('uncertain', "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNE1UVmxHSnI2d2s", "Tear_In_My_Heart.mp3");
         this.showMusic.addAudio('untried',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyZEpzczhRLWpyVnM", "Come_With_Me_Now.mp3");
 
@@ -547,8 +607,8 @@ class Argonauts2015 {
         this.showMusic.addAudio('odd',       "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyLS05RHBhMVFickE", "Clint_Eastwood.mp3");
 
         this.showMusic.addAudio('treasure',  "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyVld1T1dkckJlR0E", "Love_Is_All_Around.mp3");
-	this.showMusic.addAudio('passion',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyT29DTF96NHN3cG8", "Get_Out_of_the_Weee.mp3");
-	this.showMusic.addAudio('thyself',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyR3cyay0tVzNpLWM", "The_Joker.mp3");
+        this.showMusic.addAudio('passion',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyT29DTF96NHN3cG8", "Get_Out_of_the_Weee.mp3");
+        this.showMusic.addAudio('thyself',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyR3cyay0tVzNpLWM", "The_Joker.mp3");
     }
 }
 

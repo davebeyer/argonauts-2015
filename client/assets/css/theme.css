@@ -614,7 +614,7 @@ input#category-select {
   font-family: 'times new vespasian';
   font-style: normal;
   font-weight: normal;
-  src: local('times new vespasian'), url('assets/fonts/VESPASIAN_TIMES.woff') format('woff');
+  src: local('times new vespasian'), url('/assets/fonts/VESPASIAN_TIMES.woff') format('woff');
 }
 
 #oath,
@@ -632,18 +632,20 @@ argonauts-show a,
 
 .chosen-block {
   color: white;
-  background:rgba(0,0,0,0.3);  /* opacity 0.3 for background*/
+  background:rgba(0,0,0,0.6);  /* opacity 0.6 for background*/
   opacity : 0.7;  
   padding: 10px 20px;
+  line-height: 1.0;
 }
 
 .chosen-block .ch-word {
-  vertical-align: top;
+  /* vertical-align: top; */
+  font-size   : 42px;
 }
 
 .chosen-block .ch-def {
   font-size : 26px;
-  display   : inline-block;
+  /* display   : inline-block; */
   max-width : 850px;
 }
 
@@ -667,16 +669,24 @@ argonauts-show a,
   height: 100%;
 }
 
+#slideshow .state-message,
 #slideshow .caption {
   position: absolute;
   bottom: 10px;
-  right: 20px;
   font-size: 20x;
   color: white;
   opacity : 0.6;  
   z-index: 1000;
   padding: 5px 10px;
-  background:rgba(0,0,0,0.3);  /* opacity 0.3 for background*/
+  background:rgba(0,0,0,0.6);  /* opacity 0.6 for background*/
+}
+
+#slideshow .caption {
+  right: 20px;
+}
+
+#slideshow .state-message {
+  left: 20px;
 }
 
 #slideshow .stop {
@@ -694,6 +704,30 @@ argonauts-show a,
   color: grey;
   cursor: pointer;
 }
+
+#splash-page2 .prog-bar {
+  height: 10px;
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 15px;
+  height: 5px;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  z-index: 1000;
+}
+
+#splash-page2 .prog-bar .prog {
+  position: absolute:
+  left: 0px;
+  width: 0%;
+  height: 100%;
+  background-color: #ACCAE6;
+  margin: 0;
+  padding: 0;
+}
+
 
 body {
   background-color: black;
