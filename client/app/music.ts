@@ -66,6 +66,11 @@ export class ShowMusic {
             options.volume = 1.0;
         }
 
+        if (audioId in this.fadeTimers) {
+            clearTimeout(this.fadeTimers[audioId].timer);
+            delete this.fadeTimers[audioId];
+        }
+
         setTimeout(function() {
             // Give browser a moment for the pause to take effect
             var $audio = $("#music-container #audio-" + audioId);

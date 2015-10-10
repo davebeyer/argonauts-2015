@@ -553,7 +553,7 @@ class Argonauts2015 {
 
         if (options.stopMusic && this.showMusic) {
             this.showMusic.fadeOut(this.word);
-            this.showMusic.play("oath-bg", {volume : 0.6});
+            this.showMusic.play("oath-bg", {volume : 0.5});
         }
         
         self.running = false;
