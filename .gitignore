@@ -11,5 +11,7 @@ node_modules/*
 /client/components/*.js
 /client/components/*.js.map
 
+/client/assets/audio/others/*
+
 
 

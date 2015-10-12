@@ -44,11 +44,26 @@ export class ShowMusic {
     addAudio(audioId, url, filename, options) {
         if (!options) { options = {}; }
 
-        var $newAudio = $('<audio preload="auto"><source type="audio/mpeg"></audio>');  // mp3 audio
+        // <source type="audio/mp4"   class="mp4">  
+        var tmpl = `<audio>
+                      <source type="audio/ogg"  class="ogg">  
+                      <source type="audio/mpeg" class="mp3">
+                    </audio>`;
+
+        var $newAudio = $(tmpl);
+
+        if (options.preload) {
+            $newAudio.attr('preload', 'auto');
+        } else {
+            $newAudio.attr('preload', 'none');
+        }
 
         // Debugging, two methods
+        // $newAudio.find("source.mp4").attr('src', '/assets/audio/' + filename + '.m4a');
+
         if (true) {
-            $newAudio.find("source").attr('src', '/assets/audio/' + filename);
+            $newAudio.find("source.ogg").attr('src', '/assets/audio/' + filename + '.ogg');
+            $newAudio.find("source.mp3").attr('src', '/assets/audio/' + filename + '.mp3');
         } else {
             $newAudio.find("source").attr('src', url);
         } 
@@ -71,19 +86,40 @@ export class ShowMusic {
             delete this.fadeTimers[audioId];
         }
 
-        setTimeout(function() {
-            // Give browser a moment for the pause to take effect
-            var $audio = $("#music-container #audio-" + audioId);
+        var $audio = $("#music-container #audio-" + audioId);
 
-            // Cast to <any> to avoid TS errors when setting audio properties below
-            var audio  = <any>($audio[0]);  
+        // Cast to <any> to avoid TS errors when setting audio properties below
+        var audio  = <any>($audio[0]);  
 
-            // Reset
-            audio.loop = true;
-            audio.currentTime = 0;
-            audio.volume = options.volume;
-            audio.play();
-        }, 10);
+        // Reset
+        audio.loop = true;
+        audio.currentTime = 0;
+        audio.volume = options.volume;
+
+        if (audio.readyState >= 4) {  // 4 = HAVE_ENOUGH_DATA
+            setTimeout(function() {
+                // Give browser a moment for the pause to take effect
+                audio.play();
+            }, 10);
+
+        } else {
+            // load/reload this audio element!
+
+            // If not in ready state, then load and wait for canplay event
+            // (Otherwise, already in browser's cache and ready to play now)
+
+            audio.load();
+
+            $audio.on("canplay canplaythrough", function() {
+                // canplay typically fired first, then
+                // canplaythrough fired when browser estimates it 
+                // will download in time so that buffering stops do not occur.
+
+                audio.play();
+                $audio.off("canplay canplaythrough");  // Remove event handlers
+            });
+        }
+
     }
 
     fadeOut(audioId, options) {

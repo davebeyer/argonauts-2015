@@ -2,11 +2,15 @@
 /// <reference path="../../typings/jquery/jquery.d.ts" />
 /// <reference path="../../typings/firebase/firebase.d.ts" />
 /// <reference path="../../typings/requirejs/require.d.ts" />
+/// <reference path="../../typings/hammerjs/hammerjs.d.ts" />
 /// <reference path="./music.ts" />
 
 import {Component, View, bootstrap} from 'angular2/angular2';
 
 export var FBase;
+
+// Load support for touch events
+var Hammer = require('hammerjs');
 
 var ImageData = null;
 
@@ -43,22 +47,21 @@ var ShowMusic = require('./music').ShowMusic;
               <img style="width: 100%; height:100%" src="assets/img/argonaut_flag_red_plain.png"/>
             </div>
 
-            <div style="position:relative; top: 80px; z-index:20; color:#444; font: 42px 'times new vespasian'; width: 850px; margin: 0 auto; padding-left:80px"> 
-              The Argonauts:<sup style="font-size:60%">*</sup>
+            <div style="position:relative; top: 80px; z-index:20; color:#444; font: 42px 'times new vespasian'; width: 900px; margin: 0 auto; padding-left:50px"> 
+              The Argonauts:
               <table style="color: #444; font: 36px 'times new vespasian'; margin: 20px 0 0 20px">
                 <tr style="height:100px">
                   <td valign="top" style="width:40px"><b>1.</b></td>
-                  <td valign="top">The associated camp of eight virgin burners<br/>at the burn of MMXV<br/>(the original Burning Man Argonauts).</td>
-                </tr>
-                <tr>
-                  <td colspan="2">&nbsp;</td>
+                  <td valign="top">Ancient Greek adventurers who sailed with Jason in search of the Golden Fleece.</td>
                 </tr>
                 <tr style="height:100px">
                   <td valign="top"><b>2.</b></td>
-                  <td valign="top">Those subsequently inducted by reciting<br/>the <b>Argonaut Oath</b> ...</td>
+                  <td valign="top">A camp of eight Burning Man virgins at the burn of <span style="font:normal 26px times">2015</span>
+                                   united by the Argonaut Oath.</td>
                 </tr>
-                <tr>
-                  <td colspan="2" align="right">  <span style="font-size:60%">* modern-day</span>  </td>
+                <tr style="height:100px">
+                  <td valign="top"><b>3.</b></td>
+                  <td valign="top">Those subsequently inducted by reciting the Oath...</td>
                 </tr>
         
               </table>
@@ -110,7 +113,7 @@ var ShowMusic = require('./music').ShowMusic;
 
           <div id="slideshow" style="position: absolute; left: 0; top:0; width: 100%; height: 100%; display:none">
             <a class="stop"> &#8617;</a>
-            <p class="state-message" style="display:none"> Paused (spacebar to resume)</p>
+            <p class="state-message" style="display:none"> Paused </p>
             <p class="caption" style="display:none"></p>
           </div>
 
@@ -127,6 +130,7 @@ class Argonauts2015 {
     running     : boolean;
     timerId     : number;
     word        : string;
+    startImageNum : number;
 
     showMusic   : any;   // ShowMusic; 
 
@@ -137,6 +141,7 @@ class Argonauts2015 {
         this.running     = false;
         this.timerId     = null;
         this.word        = '';
+        this.startImageNum = null;
 
         // Note that this may get filled in at a later point
         this.showMusic  = null;
@@ -163,7 +168,7 @@ class Argonauts2015 {
             setTimeout(function() {
                 $("#splash-page").stop(true, true).fadeOut(2000);
                 $("#splash-page2").stop(true, true).fadeIn(2000, function() {
-                    var splash2Dur = 7000;
+                    var splash2Dur = 8000;
 
                     $("#splash-page2 .prog").animate({width : "100%"}, splash2Dur);
 
@@ -215,11 +220,17 @@ class Argonauts2015 {
 
             // Adv to next image then start slideshow using this word as the keyword
 
-            self.nextImage(1, function() {
-                self.runSlideshow();
-                if (self.showMusic) {
-                    self.showMusic.fadeOut("oath-bg");
-                    self.showMusic.play(self.word);
+            self.startImageNum = null; // reset
+
+            self.nextImage(1, function(doneFlag) {
+                if (doneFlag) {
+                    console.error("Unable to start slideshow??");
+                } else {
+                    self.runSlideshow();
+                    if (self.showMusic) {
+                        self.showMusic.fadeOut("oath-bg");
+                        self.showMusic.play(self.word);
+                    }
                 }
             });
 
@@ -228,10 +239,7 @@ class Argonauts2015 {
 
         $("#slideshow").on("click", ".stop", function(event) {
             event.preventDefault();
-            $("#oath-page").stop(true, true).fadeIn(2000);
-            $("#slideshow").stop(true, true).fadeOut(2000);
-
-            self.stopSlideshow({stopMusic : true});
+            self.returnToOath();
             return false;
         });
 
@@ -255,13 +263,38 @@ class Argonauts2015 {
                     break;
                 case 27:  // escape
                     event.preventDefault();
-                    $("#oath-page").stop(true, true).fadeIn(2000);
-                    $("#slideshow").stop(true, true).fadeOut(2000);
-                    self.stopSlideshow({stopMusic : true});
+                    self.returnToOath();
                     break;
                 }
             }
             return true;
+        });
+
+        // 
+        // Touch/Gesture events
+        // 
+
+        var gestures = new Hammer($("#slideshow")[0]);
+
+        gestures.on("swipeup swipedown swipeleft swiperight doubletap tap", function(event) {
+            event.preventDefault();
+            console.log (event.type + " gesture detected");
+            switch (event.type) {
+            case 'tap':
+                self.toggleSlideshowRunState();
+                break;
+            case 'swipeup':
+            case 'swipeleft':
+                self.advanceImage(1);
+                break;
+            case 'swiperight':
+            case 'swipedown':
+                self.advanceImage(-1);
+                break;
+            case 'doubletap':
+                self.returnToOath();
+                break;
+            }
         });
 
         console.log("Argonauts2015: onInit");
@@ -412,8 +445,10 @@ class Argonauts2015 {
         return false;
     }
 
+
     nextImageObj(dir) {
         var num   = this.incImageNum(this.curImageNum, dir);
+
         var count = 0;
         var obj;
 
@@ -434,10 +469,42 @@ class Argonauts2015 {
         return this.images[this.curImageNum];
     }
 
+    nextImageObjCheck(dir) {
+        var prevNum  = this.curImageNum;
+
+        var imageObj = this.nextImageObj(dir);
+
+        // Check whether we're done before returning
+
+        if (this.startImageNum === null) {
+            this.startImageNum = this.curImageNum;
+        } else {
+            if (dir > 0) {
+                if (this.startImageNum === this.curImageNum) {
+                    return null;  // done
+                }
+            } else {
+                if (prevNum === this.startImageNum) {
+                    // backed up an image, so reset start to new image
+                    this.startImageNum = this.curImageNum;
+                }
+            }
+        }
+
+        return imageObj;
+    }
+
     nextImage(dir, doneCB) {
         var self  = this;
 
-        var imageObj = self.nextImageObj(dir);
+        var imageObj = self.nextImageObjCheck(dir);
+
+        if (imageObj === null) {
+            self.returnToOath();  // done with slideshow
+            doneCB(true);
+            return;
+        }
+
         var imageId  = self.imageId(imageObj);
         var caption  = self.imageCaption(imageObj);
 
@@ -511,13 +578,19 @@ class Argonauts2015 {
         
     }
 
+    returnToOath () {
+        $("#oath-page").stop(true, true).fadeIn(2000);
+        $("#slideshow").stop(true, true).fadeOut(2000);
+        this.stopSlideshow({stopMusic : true});
+    }
+
     advanceImage(dir) {
         var self = this;
         var runningState = self.running; // save before stopping slideshow
 
         self.stopSlideshow();
-        self.nextImage(dir, function() {
-            if (runningState) {
+        self.nextImage(dir, function(doneFlag) {
+            if (runningState && !doneFlag) {
                 self.runSlideshow();
             }
         });
@@ -527,13 +600,18 @@ class Argonauts2015 {
         if (this.timerId === null) {
             this.resumeSlideshow();
         } else {
-            this.pauseSlideshow();
+            this.pauseSlideshow({showPaused : true});
         }
     }
 
-    pauseSlideshow() {
+    pauseSlideshow(options?) {
+        if (!options) { options = {}; }
+
         console.log("Pausing");
-        $("#slideshow .state-message").show();
+
+        if (options.showPaused) {
+            $("#slideshow .state-message").stop(true, true).show();
+        }
 
         if (this.timerId !== null) {
             clearTimeout(this.timerId)
@@ -572,12 +650,16 @@ class Argonauts2015 {
         var self = this;
 
         self.running = true;
-        $("#slideshow .state-message").hide();
+        $("#slideshow .state-message").stop(true, true).hide();
 
         function _nextTick() {
             self.timerId = null;
             if (self.running) {
-                self.nextImage(1, function() { _setTimer(slideTimeout_ms); });
+                self.nextImage(1, function(doneFlag) { 
+                    if (!doneFlag) {
+                        _setTimer(slideTimeout_ms); 
+                    }
+                });
             }
         }
 
@@ -594,26 +676,26 @@ class Argonauts2015 {
     // Music
 
     initMusic() {
-        this.showMusic.addAudio('oath-bg', "", "biking.mp3");
+        this.showMusic.addAudio('oath-bg', "", "biking", {preload: true});
 
-        this.showMusic.addAudio('argonauts', "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNjlxZ21uUEVEalE", "In-A-Gadda-Da-Vida.mp3");
-        this.showMusic.addAudio('spirit',    "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyekxybVRRTHB1ZUU", "Magic_Carpet_Ride.mp3");
+        this.showMusic.addAudio('argonauts', "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNjlxZ21uUEVEalE", "In-A-Gadda-Da-Vida");
+        this.showMusic.addAudio('spirit',    "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyekxybVRRTHB1ZUU", "Magic_Carpet_Ride");
 
-        this.showMusic.addAudio('unknown',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyMjNHOFh2SUNXc2s", "Stolen_Dance.mp3");
-        this.showMusic.addAudio('uncertain', "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNE1UVmxHSnI2d2s", "Tear_In_My_Heart.mp3");
-        this.showMusic.addAudio('untried',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyZEpzczhRLWpyVnM", "Come_With_Me_Now.mp3");
+        this.showMusic.addAudio('unknown',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyMjNHOFh2SUNXc2s", "Stolen_Dance");
+        this.showMusic.addAudio('uncertain', "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNE1UVmxHSnI2d2s", "Tear_In_My_Heart");
+        this.showMusic.addAudio('untried',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyZEpzczhRLWpyVnM", "Come_With_Me_Now");
 
-        this.showMusic.addAudio('darkness',  "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyakdUNFc1aFUwSW8", "Put_Your_Lights_On.mp3");
-        this.showMusic.addAudio('dogma',     "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyMWlfSXpndjdpOTg", "Take_Me_to_Church.mp3");
-        this.showMusic.addAudio('fear',      "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNE83SlNnb1E2T2M", "Devil_In_Me.mp3");
+        this.showMusic.addAudio('darkness',  "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyakdUNFc1aFUwSW8", "Put_Your_Lights_On");
+        this.showMusic.addAudio('dogma',     "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyMWlfSXpndjdpOTg", "Take_Me_to_Church");
+        this.showMusic.addAudio('fear',      "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyNE83SlNnb1E2T2M", "Devil_In_Me");
 
-        this.showMusic.addAudio('strange',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyWTlMMmhyNG1jUWc", "Take_a_Walk_On_the_Wild_Side.mp3");
-        this.showMusic.addAudio('dirty',     "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlySkFiZ3poa0t2Tlk", "How_You_Like_Me_Now.mp3");
-        this.showMusic.addAudio('odd',       "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyLS05RHBhMVFickE", "Clint_Eastwood.mp3");
+        this.showMusic.addAudio('strange',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyWTlMMmhyNG1jUWc", "Take_a_Walk_On_the_Wild_Side");
+        this.showMusic.addAudio('dirty',     "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlySkFiZ3poa0t2Tlk", "How_You_Like_Me_Now");
+        this.showMusic.addAudio('odd',       "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyLS05RHBhMVFickE", "Clint_Eastwood");
 
-        this.showMusic.addAudio('treasure',  "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyVld1T1dkckJlR0E", "Love_Is_All_Around.mp3");
-        this.showMusic.addAudio('passion',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyT29DTF96NHN3cG8", "Get_Out_of_the_Weee.mp3");
-        this.showMusic.addAudio('thyself',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyR3cyay0tVzNpLWM", "The_Joker.mp3");
+        this.showMusic.addAudio('treasure',  "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyVld1T1dkckJlR0E", "Love_Is_All_Around");
+        this.showMusic.addAudio('passion',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyT29DTF96NHN3cG8", "Get_Out_of_the_Weee");
+        this.showMusic.addAudio('thyself',   "https://docs.google.com/uc?export=open&id=0B2F9sAQ0AKlyR3cyay0tVzNpLWM", "The_Joker");
     }
 }
 
