@@ -1,6 +1,13 @@
-# The 2015 Argonatauts Show
+# Wait, Are you looking for the Argonauts online slideshow?
 
-Oath-powered photos & music, of the 2015 Argonauts!
+Click [here](https://argonauts-2015.firebaseapp.com)
+
+
+# Argonauts show code
+
+## The 2015 Argonatauts Show - What is it
+
+An oath-powered photos & music slideshow, of the 2015 Argonauts at Burning Man!
 
 ```
             THE ARGONAUT OATH
