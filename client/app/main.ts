@@ -95,7 +95,10 @@ var ShowMusic = require('./music').ShowMusic;
                   &nbsp; Seek  <a href="#" class="word">Treasure</a>, <a href="#" class="word">Passion</a>, and <a href="#" class="word">Thyself</a>. 
 
                   <div style="text-align:right; margin:10px 10px 0 0; font-size:20px">
-                    Argonaut Dave
+                    <a  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
+                      Argonaut Dave 
+                      <img alt="Creative Commons License" style="border-width:0; opacity:0.4; height:20px;" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
+                    </a>
                   </div>
                 </div>
               </div>
