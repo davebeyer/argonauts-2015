@@ -34,7 +34,7 @@ var ShowMusic = require('./music').ShowMusic;
 
             <div style="position:absolute; left: 20px;  bottom: 30px; z-index:20; color:#ACCAE6; font: 26px 'times new vespasian'"> 
               <a href="mailto:argonauts.united@gmail.com" target="_blank">argonauts.united@gmail.com</a><br/>
-              Burning Man MMXV
+              <a href="http://www.facebook.com/argonautsunited" target="_blank">facebook.com/argonautsunited</a>
             </div>
 
             <!-- 
@@ -69,7 +69,7 @@ var ShowMusic = require('./music').ShowMusic;
 
             <div style="position:absolute; left: 20px;  bottom: 30px; z-index:20; color:#ACCAE6; font: 26px 'times new vespasian'"> 
               <a href="mailto:argonauts.united@gmail.com" target="_blank">argonauts.united@gmail.com</a><br/>
-              Burning Man MMXV
+              <a href="http://www.facebook.com/argonautsunited" target="_blank">facebook.com/argonautsunited</a>
             </div>
 
             <div class="prog-bar">
@@ -103,7 +103,7 @@ var ShowMusic = require('./music').ShowMusic;
 
             <div style="position:absolute; left: 20px;  bottom: 30px; z-index:20; color:#ACCAE6; font: 26px 'times new vespasian'"> 
               <a href="mailto:argonauts.united@gmail.com" target="_blank">argonauts.united@gmail.com</a><br/>
-              Burning Man MMXV
+              <a href="http://www.facebook.com/argonautsunited" target="_blank">facebook.com/argonautsunited</a>
             </div>
             <div style="position:absolute; right: 20px; bottom: 30px; z-index:20; color:#ACCAE6; font-size:18px"> 
               Click on a word, <br/>
